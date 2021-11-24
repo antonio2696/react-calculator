@@ -48,11 +48,11 @@ export default class Calculator extends Component {
         }
         else {
           if (equals) {
-            values[0] = eval(`${values[0]} ${currentOperation} ${values[1]}`)
+            values[0] = this.doOperation(values[0], values[1], currentOperation)
           }
           else {
             if (!blockNextOperation) {
-              values[0] = eval(`${values[0]} ${currentOperation} ${values[1]}`)
+              values[0] = this.doOperation(values[0], values[1], currentOperation)
             }
             else {
               values[0] = this.state.values[0]
@@ -79,6 +79,21 @@ export default class Calculator extends Component {
       setTimeout(() => {
         this.setState({ blink: false })
       }, 75)
+    }
+  }
+
+  doOperation = (a, b, operation) => {
+    switch (operation) {
+      case '+':
+        return a + b
+      case '-':
+        return a - b
+      case '*':
+        return a * b
+      case '/':
+        return a / b
+      default:
+        return a + b
     }
   }
 
