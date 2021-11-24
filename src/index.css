@@ -12,3 +12,13 @@ body {
   text-align: center;
   background: linear-gradient(to right, #3a6186, #89253e);
 }
+
+a {
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}

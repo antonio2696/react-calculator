@@ -7,9 +7,10 @@ const initialState = {
   displayValue: '0',
   clearDisplay: false,
   operation: null,
+  blockNextOperation: false,
   values: [0, 0],
   current: 0,
-  blink: false
+  blink: false,
 }
 
 export default class Calculator extends Component {
@@ -38,28 +39,40 @@ export default class Calculator extends Component {
     else {
       const equals = operation === '='
       const currentOperation = this.state.operation
-      const values = [...this.state.values]
+      let values = [...this.state.values]
+      let blockNextOperation = this.state.blockNextOperation
 
       try {
         if (values[1] === 0 && currentOperation === '/') {
           values[0] = 0
         }
         else {
-          values[0] = eval(`${values[0]} ${currentOperation} ${values[1]}`)
+          if (equals) {
+            values[0] = eval(`${values[0]} ${currentOperation} ${values[1]}`)
+          }
+          else {
+            if (!blockNextOperation) {
+              values[0] = eval(`${values[0]} ${currentOperation} ${values[1]}`)
+            }
+            else {
+              values[0] = this.state.values[0]
+            }
+
+            blockNextOperation = true
+          }
         }
       }
       catch {
         values[0] = this.state.values[0]
       }
 
-      values[1] = 0
 
       this.setState({
         blink: true,
         displayValue: values[0],
-        operation: equals ? null : operation,
-        current: equals ? 0 : 1,
+        operation: equals ? currentOperation : operation,
         clearDisplay: !equals,
+        blockNextOperation,
         values
       })
       
